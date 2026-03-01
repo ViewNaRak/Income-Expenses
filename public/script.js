@@ -3,12 +3,13 @@ async function sendMessage() {
     const message = input.value.trim();
     if (!message) return;
 
-    // แสดงข้อความฝั่ง User
     appendMessage(message, 'user-message');
     input.value = '';
 
+    const loadingId = 'loading-' + Date.now();
+    appendMessage('⏳ กำลังประมวลผล...', 'bot-message', loadingId);
+
     try {
-        // ส่งข้อความไปที่ Backend ของเรา
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -16,21 +17,31 @@ async function sendMessage() {
         });
 
         const data = await response.json();
-        
-        // แสดงข้อความตอบกลับจาก Bot (n8n)
+
+        removeMessage(loadingId);
+ 
         appendMessage(data.reply, 'bot-message');
     } catch (error) {
-        appendMessage('เกิดข้อผิดพลาดในการเชื่อมต่อ', 'bot-message');
+        removeMessage(loadingId);
+        appendMessage('❌ เกิดข้อผิดพลาดในการเชื่อมต่อระบบ', 'bot-message');
     }
 }
 
-function appendMessage(text, className) {
+function appendMessage(text, className, id = null) {
     const chatMessages = document.getElementById('chatMessages');
     const msgDiv = document.createElement('div');
     msgDiv.className = `message ${className}`;
-    msgDiv.textContent = text;
+    if (id) msgDiv.id = id;
+
+    msgDiv.innerHTML = text.replace(/\n/g, '<br>');
+    
     chatMessages.appendChild(msgDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight; // เลื่อนลงมาล่างสุดเสมอ
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function removeMessage(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
 }
 
 function handleKeyPress(event) {
