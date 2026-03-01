@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Income-Expense Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>💰 ผู้ช่วยบันทึกรายรับ-รายจ่าย</h2>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot-message">
+                สวัสดีครับ! วันนี้มีรายรับหรือรายจ่ายอะไร บอกผมได้เลย เช่น "วันนี้กินข้าวไป 50 บาท" หรือ "สรุปยอดวันนี้ให้หน่อย"
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="พิมพ์ข้อความที่นี่..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">ส่ง</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
